@@ -1,4 +1,6 @@
 import { defineConfig } from "vite";
+import { resolve } from 'path'
+
 import react from "@vitejs/plugin-react";
 import tailwindcss from '@tailwindcss/vite'
 import { crx } from "@crxjs/vite-plugin";
@@ -18,4 +20,5 @@ export default defineConfig({
 			port: 5173,
 		},
 	},
+
 });

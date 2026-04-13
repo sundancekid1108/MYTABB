@@ -12,7 +12,7 @@ import {
 const Modal = () => {
 	const selectedTabs = useTabStore((state) => state.selectedTabs);
 	const { isModalOpen, openModal, closeModal } = useModalStore();
-	
+
 	const handleAddToExistingCollection = () => {
 		console.log("기존 컬렉션 추가 로직 실행");
 		console.log(selectedTabs)
@@ -34,7 +34,7 @@ const Modal = () => {
 
 	return (
 		<Transition show={isModalOpen} as={Fragment}>
-			<Dialog as="div" className="relative z-50" onClose={closeModal}>
+			<Dialog as="div" className="relative z-50 "  onClose={closeModal}>
 				<Transition.Child
 					as={Fragment}
 					enter="ease-out duration-300"
@@ -47,7 +47,7 @@ const Modal = () => {
 				</Transition.Child>
 
 				<div className="fixed inset-0 overflow-y-auto">
-					<div className="flex min-h-full items-center justify-center p-4">
+					<div className="flex min-h-full items-center justify-center p-4 uppercase">
 						<Transition.Child
 							as={Fragment}
 							enter="ease-out duration-300"
@@ -71,7 +71,7 @@ const Modal = () => {
 									</div>
 									<Dialog.Title
 										as="h3"
-										className="text-2xl font-black text-gray-900 leading-tight">
+										className="text-2xl font-black text-gray-900 leading-tight ">
 										Selected Tabs
 									</Dialog.Title>
 									<p className="text-gray-500 mt-2 font-medium">
@@ -83,13 +83,13 @@ const Modal = () => {
 									</p>
 								</div>
 
-								<div className="space-y-3">
+								<div className="space-y-3 ">
 
 									<button
 										type="button"
 										className="w-full flex items-center justify-between gap-3 rounded-2xl bg-blue-600 px-6 py-4 text-sm font-bold text-white hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200 transition-all group"
 										onClick={handleAddToExistingCollection}>
-										<div className="flex items-center gap-3">
+										<div className="flex items-center gap-3  uppercase">
 											<FolderArrowDownIcon className="w-5 h-5 text-blue-200" />
 											<span>Add to Existing Collection</span>
 										</div>
@@ -102,7 +102,7 @@ const Modal = () => {
 										type="button"
 										className="w-full flex items-center justify-between gap-3 rounded-2xl bg-gray-50 border border-gray-200 px-6 py-4 text-sm font-bold text-gray-900 hover:bg-gray-100 transition-all group"
 										onClick={handleCreateCollection}>
-										<div className="flex items-center gap-3">
+										<div className="flex items-center gap-3 uppercase ">
 											<FolderPlusIcon className="w-5 h-5 text-gray-500" />
 											<span>Create New Collection</span>
 										</div>

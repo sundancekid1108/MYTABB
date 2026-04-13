@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getWindowsInfo} from '../../chromeapi/chromeapi.js'
+import { getWindowsInfo} from '../chromeapi/chromeapi.js'
 
 
 

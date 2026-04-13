@@ -17,7 +17,7 @@ const CollectionSection = ({ title, cards, defaultOpen = true }) => {
                         <div className="flex items-center justify-between group border-b border-gray-800 pb-2 mb-4">
                             <DisclosureButton className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors focus:outline-none">
                                 <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${open ? '' : '-rotate-90'}`} />
-                                <h2 className="text-sm font-bold uppercase tracking-wider">{title}</h2>
+                                <h2 className="text-sm font-bold  tracking-wider">{title}</h2>
                                 <span className="text-xs opacity-50 font-normal">({cards.length})</span>
                             </DisclosureButton>
 
@@ -41,14 +41,14 @@ const CollectionSection = ({ title, cards, defaultOpen = true }) => {
                                             <MenuItem>
                                                 {({ isActivated }) => (
                                                     <button className={`${isActivated ? 'bg-blue-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
-                                                        Rename
+                                                        EDIT TITLE
                                                     </button>
                                                 )}
                                             </MenuItem>
                                             <MenuItem>
                                                 {({ isActivated }) => (
                                                     <button className={`${isActivated ? 'bg-red-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
-                                                        Delete
+                                                      DELETE
                                                     </button>
                                                 )}
                                             </MenuItem>

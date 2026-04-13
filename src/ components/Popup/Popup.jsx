@@ -9,7 +9,7 @@ import {
     XMarkIcon
 } from '@heroicons/react/24/outline';
 
-import {getCurrentTabInfo} from '../../chromeapi/chromeapi.js'
+import {getCurrentTabInfo} from '../../utils/chromeapi/chromeapi.js'
 
 const Popup = () => {
     const [tabInfo, setTabInfo] = useState({ title: '', url: '' });

@@ -34,7 +34,7 @@ const AddCollection = ({ onSave, onCancel }) => {
                         onChange={(e) => setTitle(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="COLLECTION TITLE"
-                        className="bg-transparent text-xl font-bold uppercase tracking-wider text-white placeholder:text-gray-600 outline-none w-full"
+                        className="bg-transparent text-xl font-bold tracking-wider text-white placeholder:text-gray-600 outline-none w-full"
                     />
                 </div>
 

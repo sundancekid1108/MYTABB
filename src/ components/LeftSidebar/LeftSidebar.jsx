@@ -64,7 +64,7 @@ const LeftSidebar = () => {
             <section className="w-60 flex flex-col p-4">
 
                 <div className="mb-6 px-2">
-                    <h2 className="text-xs font-bold text-gray-500 uppercase tracking-tight truncate">sundacne's organization</h2>
+                    {/*<h2 className="text-xs font-bold text-gray-500 uppercase tracking-tight truncate">sundacne's organization</h2>*/}
                 </div>
 
                 <div className="space-y-1 mb-8">
@@ -100,18 +100,18 @@ const LeftSidebar = () => {
                     </div>
                 </div>
 
-                <div className="mt-auto pt-4 space-y-4">
-                    <div className="space-y-1 border-t border-gray-800 pt-4">
-                        <NavItem
-                            label="Invite members"
-                            icon={<UserPlusIcon className="w-4 h-4" />}
-                        />
-                        <NavItem
-                            label="Organization settings"
-                            icon={<Cog6ToothIcon className="w-4 h-4" />}
-                        />
-                    </div>
-                </div>
+                {/*<div className="mt-auto pt-4 space-y-4">*/}
+                {/*    <div className="space-y-1 border-t border-gray-800 pt-4">*/}
+                {/*        <NavItem*/}
+                {/*            label="Invite members"*/}
+                {/*            icon={<UserPlusIcon className="w-4 h-4" />}*/}
+                {/*        />*/}
+                {/*        <NavItem*/}
+                {/*            label="Organization settings"*/}
+                {/*            icon={<Cog6ToothIcon className="w-4 h-4" />}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*</div>*/}
             </section>
         </div>
     );

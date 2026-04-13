@@ -37,14 +37,22 @@ const CollectionGroup = () => {
     const reorderRef = useRef(null);
     const viewRef = useRef(null);
 
-    const { collections, addCollection } = useCollectionStore();
+    const { collections, addCollection,initializeCollection } = useCollectionStore();
+
+
     const availableTags = ["Work", "Personal", "Design", "Dev", "Shopping", "Research"];
+
+    useEffect(() => {
+        initializeCollection();
+        console.log("collections", collections)
+    }, [initializeCollection]);
 
     useEffect(() => {
         if (isCreating && inputRef.current) {
             inputRef.current.focus();
         }
     }, [isCreating]);
+
 
 
 
