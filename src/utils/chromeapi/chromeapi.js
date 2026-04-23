@@ -33,6 +33,23 @@ const getCurrentTabInfo = async () => {
     }
 };
 
+export const getAllBookmarks = async () => {
+    try {
+        if (typeof chrome !== "undefined" && chrome.tabs) {
+            const result = await chrome.bookmarks.getTree();
+
+            return result
+        }
+
+
+
+
+    } catch (error) {
+        console.error("Failed to get bookmarks tree:", error);
+        return [];
+    }
+};
+
 
 
 export { getWindowsInfo, getCurrentTabInfo }

@@ -78,7 +78,7 @@ const Popup = () => {
                     <div className="bg-[#1c1c1f] border border-gray-800 rounded-2xl p-4 space-y-4 animate-in fade-in slide-in-from-top-2">
 
                         <div>
-                            <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1.5 ml-1">Page Title</p>
+                            <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">Page Title</p>
                             <input
                                 type="text"
                                 value={tabInfo.title}
@@ -90,7 +90,7 @@ const Popup = () => {
 
 
                         <div>
-                            <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1.5 ml-1">URL Address</p>
+                            <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">URL Address</p>
                             <div className="flex items-center gap-2 bg-[#121214] p-2.5 rounded-lg border border-gray-800">
                                 <span className="text-[11px] text-gray-500 truncate flex-1 font-mono italic">
                                     {tabInfo.url}
@@ -106,7 +106,7 @@ const Popup = () => {
 
 
                         <div>
-                            <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1.5 ml-1">Select Collection</p>
+                            <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">Select Collection</p>
                             <div className="relative">
                                 <FolderIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                 <select

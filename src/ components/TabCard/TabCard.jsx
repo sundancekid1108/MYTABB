@@ -7,8 +7,11 @@ import {
     EllipsisHorizontalIcon
 } from '@heroicons/react/24/outline';
 
-const TabCard = ({ tab, title, description, favicon, onClose }) => {
+const TabCard = (props  ) => {
+    const  {title, url,  favicon, onClose } = props
     const [isSelected, setIsSelected] = useState(false);
+
+
 
     return (
 
@@ -34,9 +37,13 @@ const TabCard = ({ tab, title, description, favicon, onClose }) => {
                     }`}>
                         <img
                             src={favicon}
+                            loading="lazy"
                             alt=""
                             className="w-full h-full object-contain p-0.5"
-                            onError={(e) => e.target.src = 'https://www.google.com/s2/favicons?sz=64&domain=google.com'}
+                            onError={(e) => {
+                                e.target.onerror = null; // 무한 루프 방지
+                                e.target.src = <div className="w-full h-full bg-gray-700 rounded-sm" />
+                            }}
                         />
                     </div>
 
@@ -57,9 +64,9 @@ const TabCard = ({ tab, title, description, favicon, onClose }) => {
             </div>
 
 
-            <p className="text-xs text-gray-400 truncate mb-4 px-0.5">
-                {description}
-            </p>
+            {/*<p className="text-xs text-gray-400 truncate mb-4 px-0.5">*/}
+            {/*    {description}*/}
+            {/*</p>*/}
 
 
             <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-700/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-1">

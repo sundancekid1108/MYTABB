@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import RightSidebar from "./ components/RightSidebar/RightSidebar.jsx";
 import LeftSidebar from "./ components/LeftSidebar/LeftSidebar.jsx";
-import CollectionGroup from './ components/CollectionGroup/CollectionGroup.jsx'
+import BookmarkGroup from './ components/BookmarkGroup/BookmarkGroup.jsx'
 import useTabStore from './utils/zustand/tabstore.js'
 import Modal from "./ components/Modal/Modal.jsx";
 
@@ -47,7 +47,7 @@ const App = () => {
 	}, [fetchTabs]);
 
 	return (
-		<div className="flex h-screen w-screen bg-[#1e1e26] text-white font-sans overflow-hidden selection:bg-blue-500/30">
+		<div className="flex h-screen w-screen bg-[#1e1e26] text-white font-sans overflow-hidden selection:bg-blue-500/30 uppercase">
 
 
 			<LeftSidebar
@@ -57,7 +57,7 @@ const App = () => {
 
 
 			<main className="flex-1 flex flex-col min-w-0 h-full bg-[#1e1e26] overflow-hidden">
-				<CollectionGroup />
+				<BookmarkGroup />
 			</main>
 
 

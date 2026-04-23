@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/r
 import { EllipsisVerticalIcon, XMarkIcon, CheckIcon, TagIcon, PlusIcon } from "@heroicons/react/24/outline";
 import React, { Fragment, useState, useEffect, useRef } from "react";
 
-const AddCollection = ({ onSave, onCancel }) => {
+const AddBookmark = ({ onSave, onCancel }) => {
     const [title, setTitle] = useState("");
     const inputRef = useRef(null);
 
@@ -91,4 +91,4 @@ const AddCollection = ({ onSave, onCancel }) => {
     );
 };
 
-export default AddCollection;
+export default AddBookmark;

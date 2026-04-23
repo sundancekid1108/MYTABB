@@ -63,7 +63,7 @@ const useTabStore = create((set, get) => ({
         }
     },
 
-    clearSelectedTabs: () => set({ selectedTabs: [], }),
+    clearSelectedTabs: () => set({ selectedTabs: [] }),
 
 
 

@@ -1,5 +1,6 @@
 import { Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import  useCollectionStore  from '../../utils/zustand/collectionstore.js'
 import useTabStore from "../../utils/zustand/tabstore.js";
 import useModalStore from "../../utils/zustand/modalstore.js";
 import {
@@ -13,12 +14,30 @@ const Modal = () => {
 	const selectedTabs = useTabStore((state) => state.selectedTabs);
 	const { isModalOpen, openModal, closeModal } = useModalStore();
 
+	const { addCollection } = useCollectionStore();
+
+
+	const createCollectionNameWithTime = () => {
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = String(now.getMonth() + 1).padStart(2, '0');
+		const day = String(now.getDate()).padStart(2, '0');
+		const hours = String(now.getHours()).padStart(2, '0');
+		const minutes = String(now.getMinutes()).padStart(2, '0');
+
+		return `${year}-${month}-${day} ${hours}:${minutes}`;
+	};
+
 	const handleAddToExistingCollection = () => {
 		console.log("기존 컬렉션 추가 로직 실행");
 		console.log(selectedTabs)
 	};
 	const handleCreateCollection = () => {
 		console.log("새 컬렉션 생성 로직 실행");
+		if (selectedTabs.length === 0) return;
+		const collectionTitle = createCollectionNameWithTime()
+		addCollection(collectionTitle)
+
 		console.log(selectedTabs)
 	};
 
@@ -47,7 +66,7 @@ const Modal = () => {
 				</Transition.Child>
 
 				<div className="fixed inset-0 overflow-y-auto">
-					<div className="flex min-h-full items-center justify-center p-4 uppercase">
+					<div className="flex min-h-full items-center justify-center p-4 ">
 						<Transition.Child
 							as={Fragment}
 							enter="ease-out duration-300"
@@ -89,7 +108,7 @@ const Modal = () => {
 										type="button"
 										className="w-full flex items-center justify-between gap-3 rounded-2xl bg-blue-600 px-6 py-4 text-sm font-bold text-white hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200 transition-all group"
 										onClick={handleAddToExistingCollection}>
-										<div className="flex items-center gap-3  uppercase">
+										<div className="flex items-center gap-3  ">
 											<FolderArrowDownIcon className="w-5 h-5 text-blue-200" />
 											<span>Add to Existing Collection</span>
 										</div>
@@ -102,7 +121,7 @@ const Modal = () => {
 										type="button"
 										className="w-full flex items-center justify-between gap-3 rounded-2xl bg-gray-50 border border-gray-200 px-6 py-4 text-sm font-bold text-gray-900 hover:bg-gray-100 transition-all group"
 										onClick={handleCreateCollection}>
-										<div className="flex items-center gap-3 uppercase ">
+										<div className="flex items-center gap-3  ">
 											<FolderPlusIcon className="w-5 h-5 text-gray-500" />
 											<span>Create New Collection</span>
 										</div>

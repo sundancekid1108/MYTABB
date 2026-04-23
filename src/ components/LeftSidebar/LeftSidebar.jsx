@@ -61,58 +61,58 @@ const LeftSidebar = () => {
             </section>
 
 
-            <section className="w-60 flex flex-col p-4">
+            {/*<section className="w-60 flex flex-col p-4">*/}
 
-                <div className="mb-6 px-2">
-                    {/*<h2 className="text-xs font-bold text-gray-500 uppercase tracking-tight truncate">sundacne's organization</h2>*/}
-                </div>
+            {/*    <div className="mb-6 px-2">*/}
+            {/*        /!*<h2 className="text-xs font-bold text-gray-500  tracking-tight truncate">sundacne's organization</h2>*!/*/}
+            {/*    </div>*/}
 
-                <div className="space-y-1 mb-8">
-                    <NavItem label="Search" icon={<MagnifyingGlassIcon className="w-[18px] h-[18px]" />} />
-                    <NavItem label="To / Links" icon={<LinkIcon className="w-[18px] h-[18px]" />} />
-                    <NavItem label="Next" icon={<BookmarkIcon className="w-[18px] h-[18px]" />} />
-                </div>
+            {/*    <div className="space-y-1 mb-8">*/}
+            {/*        <NavItem label="Search" icon={<MagnifyingGlassIcon className="w-[18px] h-[18px]" />} />*/}
+            {/*        /!*<NavItem label="To / Links" icon={<LinkIcon className="w-[18px] h-[18px]" />} />*!/*/}
+            {/*        /!*<NavItem label="Next" icon={<BookmarkIcon className="w-[18px] h-[18px]" />} />*!/*/}
+            {/*    </div>*/}
 
 
-                <div className="flex-1 overflow-y-auto">
-                    <div className="flex justify-between items-center px-2 mb-2">
-                        <h3 className="text-[11px] font-bold text-gray-600 uppercase">Spaces</h3>
-                        <div className="flex gap-2 text-gray-600">
-                            <button className="hover:text-gray-300 transition-colors">
-                                <ArrowsUpDownIcon className="w-3.5 h-3.5" />
-                            </button>
-                            <button className="hover:text-gray-300 transition-colors">
-                                <SquaresPlusIcon className="w-4 h-4" strokeWidth={2.5} />
-                            </button>
-                        </div>
-                    </div>
+            {/*    <div className="flex-1 overflow-y-auto">*/}
+            {/*        <div className="flex justify-between items-center px-2 mb-2">*/}
+            {/*            <h3 className="text-[11px] font-bold text-gray-600 ">Spaces</h3>*/}
+            {/*            <div className="flex gap-2 text-gray-600">*/}
+            {/*                <button className="hover:text-gray-300 transition-colors">*/}
+            {/*                    <ArrowsUpDownIcon className="w-3.5 h-3.5" />*/}
+            {/*                </button>*/}
+            {/*                <button className="hover:text-gray-300 transition-colors">*/}
+            {/*                    <SquaresPlusIcon className="w-4 h-4" strokeWidth={2.5} />*/}
+            {/*                </button>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
 
-                    <div className="space-y-1">
-                        <NavItem
-                            label="Starred Collections"
-                            icon={<StarIcon className="w-4 h-4 text-yellow-500" fill="currentColor" />}
-                        />
-                        <NavItem
-                            active
-                            label="My Collections"
-                            icon={<LockClosedIcon className="w-4 h-4" />}
-                        />
-                    </div>
-                </div>
+            {/*        <div className="space-y-1">*/}
+            {/*            <NavItem*/}
+            {/*                label="Starred Collections"*/}
+            {/*                icon={<StarIcon className="w-4 h-4 text-yellow-500" fill="currentColor" />}*/}
+            {/*            />*/}
+            {/*            <NavItem*/}
+            {/*                active*/}
+            {/*                label="My Collections"*/}
+            {/*                icon={<LockClosedIcon className="w-4 h-4" />}*/}
+            {/*            />*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
 
-                {/*<div className="mt-auto pt-4 space-y-4">*/}
-                {/*    <div className="space-y-1 border-t border-gray-800 pt-4">*/}
-                {/*        <NavItem*/}
-                {/*            label="Invite members"*/}
-                {/*            icon={<UserPlusIcon className="w-4 h-4" />}*/}
-                {/*        />*/}
-                {/*        <NavItem*/}
-                {/*            label="Organization settings"*/}
-                {/*            icon={<Cog6ToothIcon className="w-4 h-4" />}*/}
-                {/*        />*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-            </section>
+            {/*    /!*<div className="mt-auto pt-4 space-y-4">*!/*/}
+            {/*    /!*    <div className="space-y-1 border-t border-gray-800 pt-4">*!/*/}
+            {/*    /!*        <NavItem*!/*/}
+            {/*    /!*            label="Invite members"*!/*/}
+            {/*    /!*            icon={<UserPlusIcon className="w-4 h-4" />}*!/*/}
+            {/*    /!*        />*!/*/}
+            {/*    /!*        <NavItem*!/*/}
+            {/*    /!*            label="Organization settings"*!/*/}
+            {/*    /!*            icon={<Cog6ToothIcon className="w-4 h-4" />}*!/*/}
+            {/*    /!*        />*!/*/}
+            {/*    /!*    </div>*!/*/}
+            {/*    /!*</div>*!/*/}
+            {/*</section>*/}
         </div>
     );
 };

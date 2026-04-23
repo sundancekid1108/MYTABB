@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/24/outline';
 import TabCard from "../TabCard/TabCard.jsx";
 
-const CollectionSection = ({ title, cards, defaultOpen = true }) => {
+const BookmarkSection = ({ title, cards, defaultOpen = true }) => {
     return (
         <div className="mb-4">
             <Disclosure defaultOpen={defaultOpen}>
@@ -64,7 +64,7 @@ const CollectionSection = ({ title, cards, defaultOpen = true }) => {
                                 cards.map((card, idx) => <TabCard key={idx} {...card} />)
                             ) : (
                                 <div className="col-span-full border-2 border-dashed border-gray-800 rounded-lg p-8 text-center text-gray-600 text-sm">
-                                    No items in this collection
+                                    No items
                                 </div>
                             )}
                         </DisclosurePanel>
@@ -75,4 +75,4 @@ const CollectionSection = ({ title, cards, defaultOpen = true }) => {
     )
 }
 
-export default CollectionSection;
+export default BookmarkSection;
