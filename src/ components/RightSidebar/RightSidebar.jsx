@@ -6,6 +6,7 @@ import {
     ArrowDownOnSquareIcon
 } from '@heroicons/react/24/outline';
 import useTabStore from "../../utils/zustand/tabstore.js";
+import WindowGroup from "../ WindowGroup/ WindowGroup.jsx";
 
 const TabControlIcon = ({ className }) => (
     <svg
@@ -52,110 +53,25 @@ const RightSidebar = () => {
                 </button>
             </div>
 
-
             <div className="flex-1 overflow-y-auto p-2 custom-scrollbar">
                 {windowIds.length > 0 ? (
                     windowIds.map((windowId, index) => (
-                            <Disclosure key={windowId} defaultOpen={true}>
-                                {({ open }) => (
-                                    <div className="mb-2">
-
-                                        <div className="flex items-center justify-between group px-2 py-1.5 hover:bg-[#25252f] rounded-md transition-colors">
-                                            <Disclosure.Button className="flex items-center gap-2 flex-1 text-left focus:outline-none">
-                                                <span className="text-[11px] font-bold text-gray-500 ">Window {index + 1}</span>
-
-                                                <ChevronDownIcon
-                                                    className={`w-3.5 h-3.5 text-gray-600 transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
-                                                />
-                                            </Disclosure.Button>
-
-
-                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button className="p-1 hover:bg-gray-700 rounded text-gray-500 hover:text-blue-400" title="Save Window">
-
-                                                    <ArrowDownOnSquareIcon className="w-4 h-4" />
-                                                </button>
-                                                <button className="p-1 hover:bg-gray-700 rounded text-gray-500 hover:text-white">
-                                                    <XMarkIcon className="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                        </div>
-
-
-                                        <Transition
-                                            show={open}
-                                            enter="transition duration-100 ease-out"
-                                            enterFrom="opacity-0"
-                                            enterTo="opacity-100"
-                                            leave="transition duration-75 ease-out"
-                                            leaveFrom="opacity-100"
-                                            leaveTo="opacity-0"
-                                        >
-                                            <Disclosure.Panel className="mt-1 space-y-0.5">
-                                                {tabsByWindow[windowId].map((tab) => {
-                                                    const isSelected = selectedTabs.some((s) => s.id === tab.id);
-
-                                                    return (
-                                                        <div
-                                                            key={tab.id}
-                                                            onClick={() => onSwitchTab(tab.id, tab.windowId)}
-                                                            className={`group flex items-center justify-between p-1.5 px-2 rounded-md transition-all cursor-pointer
-                                                            ${isSelected ? 'bg-[#2d2d3a] ring-1 ring-blue-500/30' : 'hover:bg-[#2d2d3a]'}`}
-                                                        >
-                                                            <div className="flex items-center gap-2 overflow-hidden flex-1">
-                                                                <div
-                                                                    className="w-4 h-4 shrink-0 relative flex items-center justify-center"
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        toggleSelectTab(tab);
-                                                                    }}
-                                                                >
-                                                                    <div className={`transition-opacity ${isSelected ? 'opacity-0' : 'group-hover:opacity-0 opacity-100'}`}>
-                                                                        {tab.favIconUrl ? (
-                                                                            <img src={tab.favIconUrl} alt="" className="w-full h-full object-contain rounded-sm" />
-                                                                        ) : (
-                                                                            <div className="w-full h-full bg-gray-700 rounded-sm" />
-                                                                        )}
-                                                                    </div>
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        readOnly
-                                                                        checked={isSelected}
-                                                                        className={`absolute inset-0 w-3.5 h-3.5 mt-0.5 ml-0.5 cursor-pointer accent-blue-500 transition-opacity
-                                                                        ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
-                                                                    />
-                                                                </div>
-
-                                                                <p className={`text-[12px] truncate leading-none transition-colors
-                                                                ${isSelected ? 'text-blue-400 font-medium' : 'text-gray-300'}`}>
-                                                                    {tab.title}
-                                                                </p>
-                                                            </div>
-
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    closeTab(tab.id);
-                                                                }}
-                                                                className="opacity-0 group-hover:opacity-100 p-0.5 hover:bg-gray-700 rounded text-gray-500 hover:text-red-400 transition-all"
-                                                            >
-                                                                <XMarkIcon className="w-4 h-4" />
-                                                            </button>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </Disclosure.Panel>
-                                        </Transition>
-                                    </div>
-                                )}
-                            </Disclosure>
-                        )
-                    )) : (
+                        <WindowGroup
+                            key={windowId}
+                            windowId={windowId}
+                            index={index}
+                            tabs={tabsByWindow[windowId]}
+                            selectedTabs={selectedTabs}
+                            actions={{ toggleSelectTab, closeTab, onSwitchTab }}
+                        />
+                    ))
+                ) : (
                     <div className="text-center text-gray-600 mt-20 text-[11px] font-medium">
                         No active tabs
                     </div>
                 )}
             </div>
+
         </aside>
     );
 };
