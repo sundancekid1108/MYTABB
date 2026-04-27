@@ -1,9 +1,11 @@
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon, XMarkIcon, CheckIcon, TagIcon, PlusIcon } from "@heroicons/react/24/outline";
 import React, { Fragment, useState, useEffect, useRef } from "react";
+import  {createBookmarkFolder} from '../../utils/chromeapi/chromeapi.js'
 
 const AddBookmark = ({ onSave, onCancel }) => {
     const [title, setTitle] = useState("");
+    const [isLoading, setIsLoading] = useState(false); // 저장 중 상태 추가
     const inputRef = useRef(null);
 
 
@@ -11,10 +13,26 @@ const AddBookmark = ({ onSave, onCancel }) => {
         if (inputRef.current) inputRef.current.focus();
     }, []);
 
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && title.trim()) {
+    const handleSave = async () => {
+        const trimmedTitle = title.trim();
+        try {
+            setIsLoading(true);
+            await createBookmarkFolder(trimmedTitle);
+            onSave()
+
+        } catch (error) {
+            console.error("북마크 폴더 생성 실패:", error);
+        } finally {
+            setIsLoading(false);
+        }
+        
+    }
+
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && title.trim()) {
             onSave(title);
-        } else if (e.key === 'Escape') {
+        } else if (event.key === 'Escape') {
             onCancel();
         }
     };
@@ -33,7 +51,7 @@ const AddBookmark = ({ onSave, onCancel }) => {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="COLLECTION TITLE"
+                        placeholder="BOOKMARK TITLE"
                         className="bg-transparent text-xl font-bold tracking-wider text-white placeholder:text-gray-600 outline-none w-full"
                     />
                 </div>
@@ -41,7 +59,8 @@ const AddBookmark = ({ onSave, onCancel }) => {
 
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={() => title.trim() && onSave(title)}
+                        onClick={handleSave}
+                        disabled={!title.trim() || isLoading}
                         className={`p-2 rounded-lg transition-all ${title.trim() ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-gray-800 text-gray-600 cursor-not-allowed'}`}
                     >
                         <CheckIcon className="w-5 h-5" strokeWidth={3} />

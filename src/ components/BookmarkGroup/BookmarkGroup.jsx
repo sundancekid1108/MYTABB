@@ -30,8 +30,6 @@ const BookmarkGroup = () => {
     const [isReorderDropdownOpen, setIsReorderDropdownOpen] = useState(false);
     const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
 
-
-    const [newTitle, setNewTitle] = useState("");
     const inputRef = useRef(null);
 
 
@@ -39,7 +37,6 @@ const BookmarkGroup = () => {
     const reorderRef = useRef(null);
     const viewRef = useRef(null);
 
-    const { collections, addCollection,initializeCollection } = useCollectionStore();
     const {bookmarkTree, initializeBookmark} = useBookmarkStore();
 
     useEffect(() => {
@@ -66,57 +63,58 @@ const BookmarkGroup = () => {
     }, []);
 
 
-
     const bookmarkSections = useMemo(() => {
         const results = [];
 
         const checkBookmarkDetail = (node) => {
-            // 1. 자식 노드가 없는 경우 스킵
-            if (!node.children || node.children.length === 0) return;
+            // 크롬 북마크 폴더 구조
+            // id: '0', 전체 폴더 들어있는 컨테이너
+            // id: '1', 북마크바
+            // id: '2', (기타 북마크)
+            const isFolder = !node.url;
 
-            // 2. 현재 폴더에 직접 포함된 링크(url이 있는 노드)들만 필터링
-            const links = node.children.filter(child => child.url);
+            if (isFolder) {
 
-            if (links.length > 0) {
-                results.push({
-                    id: node.id,
-                    // 루트 폴더나 제목이 없는 경우를 위한 기본값 설정
-                    title: node.title || (node.id === '0' ? "전체 북마크" : "기타 즐겨찾기"),
-                    cards: links.map(link => {
-                        let hostname = "";
-                        try {
-                            // URL 생성 실패 시를 대비한 예외 처리
-                            hostname = new URL(link.url).hostname;
-                        } catch (e) {
-                            hostname = "about:blank";
-                        }
+                if (node.id !== '0') {
+                    const links = node.children ? node.children.filter(child => child.url) : [];
 
-                        return {
-                            id: link.id,
-                            title: link.title,
-                            url: link.url,
-                            favicon: `https://icons.duckduckgo.com/ip3/${encodeURIComponent(hostname)}.ico`
-                        };
-                    })
-                });
-            }
+                    results.push({
+                        id: node.id,
+                        title: node.title || (node.id === '1' ? "북마크바" : "기타 즐겨찾기"),
 
-            // 3. 하위 폴더들에 대해 재귀적으로 탐색 수행
-            node.children.forEach(child => {
-                if (!child.url && child.children) {
-                    checkBookmarkDetail(child);
+                        cards: links.map(link => {
+                           
+                            const domain = new URL(link.url).hostname;
+                            const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+
+                            return {
+                                id: link.id,
+                                title: link.title,
+                                url: link.url,
+                                favicon: faviconUrl
+                            };
+                        })
+                    });
                 }
-            });
+
+
+                if (node.children) {
+                    node.children.forEach(child => {
+                        if (!child.url) {
+                            checkBookmarkDetail(child);
+                        }
+                    });
+                }
+            }
         };
 
-        // bookmarkTree가 존재할 때만 실행
         if (Array.isArray(bookmarkTree) && bookmarkTree.length > 0) {
-    
             bookmarkTree.forEach(rootNode => checkBookmarkDetail(rootNode));
         }
 
         return results;
     }, [bookmarkTree]);
+
 
 
     const filteredSections = useMemo(() => {
@@ -132,25 +130,10 @@ const BookmarkGroup = () => {
     }, [bookmarkSections, searchQuery]);
 
 
-
-    const handleCreate = () => {
-        if (newTitle.trim()) {
-            addCollection(newTitle);
-            setNewTitle("");
-            setIsCreating(false);
-        }
-    };
-
-
-
-
-
-
-
     const buttonBaseClass = "flex items-center gap-2 px-4 py-2.5 border rounded-xl text-sm font-bold transition-all active:scale-95 shadow-sm";
 
     return (
-        <div className="h-screen flex flex-col bg-[#1e1e26] text-white font-sans overflow-hidden">
+        <div className="h-screen flex flex-col bg-[#1e1e26] text-white font-sans overflow-hidden " >
             <div className="p-8 pb-0 flex-none">
                 <header className="flex items-center gap-4 mb-6">
                     <h1 className="text-2xl font-bold tracking-tight text-gray-100">My Bookmark</h1>
@@ -166,7 +149,7 @@ const BookmarkGroup = () => {
                             <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-blue-500 transition-colors" />
                             <input
                                 type="text"
-                                placeholder="Filter collections..."
+                                placeholder="SEARCH"
                                 className="bg-[#1e1e26] border border-gray-800 rounded-xl py-2.5 pl-10 pr-4 text-sm w-60 focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 outline-none transition-all placeholder:text-gray-600 font-medium"
                             />
                         </div>
@@ -265,8 +248,8 @@ const BookmarkGroup = () => {
 
                 {isCreating && (
                   <AddBookmark
-                      onSave={(title) => {
-                          addCollection(title);
+                      onSave={() => {
+
                           setIsCreating(false);
                       }}
                       onCancel={() => setIsCreating(false)}

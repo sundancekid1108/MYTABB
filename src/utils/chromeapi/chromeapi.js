@@ -23,17 +23,14 @@ const getCurrentTabInfo = async () => {
             }
         }
 
-        return {
-            title: "How to Build a Chrome Extension with React and Tailwind...",
-            url: "https://github.com/react-labs/extension"
-        };
+
     } catch (error) {
         console.error("탭 정보를 가져오는 중 오류 발생:", error);
         return { title: '', url: '' };
     }
 };
 
-export const getAllBookmarks = async () => {
+const getAllBookmarks = async () => {
     try {
         if (typeof chrome !== "undefined" && chrome.tabs) {
             const result = await chrome.bookmarks.getTree();
@@ -50,6 +47,20 @@ export const getAllBookmarks = async () => {
     }
 };
 
+const createBookmarkFolder = async (title) => {
+    try {
+
+        //   parentId 1 => 북마크바, 2 => 기타 북마크
+        await chrome.bookmarks.create({
+            parentId: "1",
+            title: title
+        });
+
+    } catch (error) {
+        console.log("북마크 폴더 생성 실패", error )
+    }
+}
 
 
-export { getWindowsInfo, getCurrentTabInfo }
+
+export { getWindowsInfo, getCurrentTabInfo, getAllBookmarks, createBookmarkFolder }

@@ -40,10 +40,7 @@ const TabCard = (props  ) => {
                             loading="lazy"
                             alt=""
                             className="w-full h-full object-contain p-0.5"
-                            onError={(e) => {
-                                e.target.onerror = null; // 무한 루프 방지
-                                e.target.src = <div className="w-full h-full bg-gray-700 rounded-sm" />
-                            }}
+
                         />
                     </div>
 

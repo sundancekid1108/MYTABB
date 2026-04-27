@@ -12,7 +12,7 @@ const  WindowGroup = ( { index, tabs, selectedTabs, actions } ) => {
                 <div className="mb-2">
                     <div className="flex items-center justify-between group px-2 py-1.5 hover:bg-[#25252f] rounded-md transition-colors">
                         <Disclosure.Button className="flex items-center gap-2 flex-1 text-left focus:outline-none">
-                            <span className="text-[11px] font-bold text-gray-500 ">Window {index + 1}</span>
+                            <span className="text-[11px] font-bold text-gray-500 ">WINDOW {index + 1}</span>
                             <ChevronDownIcon
                                 className={`w-3.5 h-3.5 text-gray-600 transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
                             />
