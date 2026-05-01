@@ -82,7 +82,7 @@ const Popup = () => {
                             <input
                                 type="text"
                                 value={tabInfo.title}
-                                onChange={(e) => setTabInfo({...tabInfo, title: e.target.value})}
+                                onChange={(event) => setTabInfo({...tabInfo, title: event.target.value})}
                                 className="w-full bg-[#121214] border border-gray-800 rounded-lg px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors"
                                 placeholder="제목을 입력하세요"
                             />
@@ -111,7 +111,7 @@ const Popup = () => {
                                 <FolderIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                                 <select
                                     value={selectedCollection}
-                                    onChange={(e) => setSelectedCollection(e.target.value)}
+                                    onChange={(event) => setSelectedCollection(event.target.value)}
                                     className="w-full bg-[#121214] border border-gray-800 rounded-lg pl-9 pr-10 py-2.5 text-sm text-gray-200 appearance-none focus:outline-none focus:border-indigo-500 cursor-pointer"
                                 >
                                     <option value="Default">Default Collection</option>

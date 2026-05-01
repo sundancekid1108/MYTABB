@@ -11,8 +11,8 @@ const TabItem = ({ tab, isSelected, onToggleSelect, onSwitch, onClose }) => {
             <div className="flex items-center gap-2 overflow-hidden flex-1">
                 <div
                     className="w-4 h-4 shrink-0 relative flex items-center justify-center"
-                    onClick={(e) => {
-                        e.stopPropagation();
+                    onClick={(event) => {
+                        event.stopPropagation();
                         onToggleSelect(tab);
                     }}
                 >
@@ -22,7 +22,7 @@ const TabItem = ({ tab, isSelected, onToggleSelect, onSwitch, onClose }) => {
                                 src={tab.favIconUrl}
                                 alt=""
                                 className="w-full h-full object-contain rounded-sm"
-                                onError={(e) => { e.target.style.opacity = 0; }} // 에러 시 투명하게
+                                onError={(event) => { event.target.style.opacity = 0; }}
                             />
                         ) : (
                             <div className="w-full h-full bg-gray-700 rounded-sm" />

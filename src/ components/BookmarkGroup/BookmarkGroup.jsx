@@ -83,15 +83,14 @@ const BookmarkGroup = () => {
                         title: node.title || (node.id === '1' ? "북마크바" : "기타 즐겨찾기"),
 
                         cards: links.map(link => {
-                           
-                            const domain = new URL(link.url).hostname;
-                            const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+
+
 
                             return {
                                 id: link.id,
                                 title: link.title,
                                 url: link.url,
-                                favicon: faviconUrl
+
                             };
                         })
                     });
@@ -236,11 +235,6 @@ const BookmarkGroup = () => {
                 </section>
 
             </div>
-
-
-
-
-
 
 
 

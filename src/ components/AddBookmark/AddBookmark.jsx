@@ -49,7 +49,7 @@ const AddBookmark = ({ onSave, onCancel }) => {
                         ref={inputRef}
                         type="text"
                         value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        onChange={(event) => setTitle(event.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="BOOKMARK TITLE"
                         className="bg-transparent text-xl font-bold tracking-wider text-white placeholder:text-gray-600 outline-none w-full"
