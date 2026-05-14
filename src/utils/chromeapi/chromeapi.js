@@ -35,17 +35,53 @@ const getAllBookmarks = async () => {
         if (typeof chrome !== "undefined" && chrome.tabs) {
             const result = await chrome.bookmarks.getTree();
 
+            // console.log("getAllBookmarks result", result)
             return result
         }
 
 
-
-
     } catch (error) {
-        console.error("Failed to get bookmarks tree:", error);
+        console.error("북마크 가져오기 실패");
         return [];
     }
 };
+
+const getBookmarkFolders = async () => {
+    try {
+        if (typeof chrome !== "undefined" && chrome.bookmarks) {
+            const tree = await chrome.bookmarks.getTree();
+            const folderList = [];
+
+
+            const findFolders = (nodes) => {
+                for (let i = 0; i < nodes.length; i++) {
+                    const node = nodes[i]
+                    if (!node.url) {
+
+                        folderList.push({
+                            id: node.id,
+                            title: node.title || (node.id === "0" ? "Root" : "이름 없는 폴더")
+                        });
+
+                        if (node.children) {
+                            findFolders(node.children);
+                        }
+                    }
+                }
+            };
+
+            findFolders(tree);
+            return folderList;
+        }
+        return [];
+
+
+    } catch (error) {
+        console.error("폴더 목록 가져오기 실패:", error);
+        return [];
+    }
+}
+
 
 const createBookmarkFolder = async (title) => {
     try {
@@ -57,10 +93,29 @@ const createBookmarkFolder = async (title) => {
         });
 
     } catch (error) {
-        console.log("북마크 폴더 생성 실패", error )
+        console.error("북마크 폴더 생성 실패", error )
     }
+}
+
+const addUrlToBookmarkFolder = async (title, url, parentId)=> {
+
+        try {
+
+            if (typeof chrome !== "undefined" && chrome.bookmarks) {
+                const result = await chrome.bookmarks.create({
+                    parentId: parentId,
+                    title: title,
+                    url: url
+                });
+                console.log("북마크 추가 성공:", result);
+                return result;
+            }
+        } catch (error) {
+            console.error("북마크 추가 실패:", error);
+            return null;
+        }
 }
 
 
 
-export { getWindowsInfo, getCurrentTabInfo, getAllBookmarks, createBookmarkFolder }
+export { getWindowsInfo, getCurrentTabInfo, getAllBookmarks, createBookmarkFolder, addUrlToBookmarkFolder, getBookmarkFolders }

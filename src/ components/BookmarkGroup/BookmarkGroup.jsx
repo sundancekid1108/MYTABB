@@ -16,11 +16,10 @@ import {
 } from '@heroicons/react/24/outline';
 import BookmarkSection from "../BookmarkSection/BookmarkSection.jsx";
 import AddBookmark from '../AddBookmark/AddBookmark.jsx'
-import useCollectionStore from "../../utils/zustand/collectionstore.js";
 import useBookmarkStore from "../../utils/zustand/bookmarkstore.js";
 
 const BookmarkGroup = () => {
-    const [viewMode, setViewMode] = useState('grid');
+    const [viewMode, setViewMode] = useState('GRID');
     const [reorderMode, setReorderMode] = useState('DRAG & DROP');
     const [searchQuery, setSearchQuery] = useState("");
     const [isCreating, setIsCreating] = useState(false);
@@ -32,18 +31,18 @@ const BookmarkGroup = () => {
 
     const inputRef = useRef(null);
 
-
-    const tagRef = useRef(null);
     const reorderRef = useRef(null);
     const viewRef = useRef(null);
 
-    const {bookmarkTree, initializeBookmark} = useBookmarkStore();
+    const {bookmarkTree,bookmarkSections, initializeBookmarkSection} = useBookmarkStore();
+
+    // console.log(bookmarkTree);
+    // console.log(bookmarkSections);
 
     useEffect(() => {
-        initializeBookmark()
-        console.log("bookmarkTree", bookmarkTree)
-        // console.log("collections", collections)
-    }, [initializeBookmark]);
+        initializeBookmarkSection()
+
+    }, [initializeBookmarkSection]);
 
 
     useEffect(() => {
@@ -52,9 +51,9 @@ const BookmarkGroup = () => {
         }
     }, [isCreating]);
 
+
     useEffect(() => {
         const handleClickOutside = (event) => {
-            if (tagRef.current && !tagRef.current.contains(event.target)) setIsTagDropdownOpen(false);
             if (reorderRef.current && !reorderRef.current.contains(event.target)) setIsReorderDropdownOpen(false);
             if (viewRef.current && !viewRef.current.contains(event.target)) setIsViewDropdownOpen(false);
         };
@@ -63,59 +62,10 @@ const BookmarkGroup = () => {
     }, []);
 
 
-    const bookmarkSections = useMemo(() => {
-        const results = [];
-
-        const checkBookmarkDetail = (node) => {
-            // 크롬 북마크 폴더 구조
-            // id: '0', 전체 폴더 들어있는 컨테이너
-            // id: '1', 북마크바
-            // id: '2', (기타 북마크)
-            const isFolder = !node.url;
-
-            if (isFolder) {
-
-                if (node.id !== '0') {
-                    const links = node.children ? node.children.filter(child => child.url) : [];
-
-                    results.push({
-                        id: node.id,
-                        title: node.title || (node.id === '1' ? "북마크바" : "기타 즐겨찾기"),
-
-                        cards: links.map(link => {
 
 
 
-                            return {
-                                id: link.id,
-                                title: link.title,
-                                url: link.url,
-
-                            };
-                        })
-                    });
-                }
-
-
-                if (node.children) {
-                    node.children.forEach(child => {
-                        if (!child.url) {
-                            checkBookmarkDetail(child);
-                        }
-                    });
-                }
-            }
-        };
-
-        if (Array.isArray(bookmarkTree) && bookmarkTree.length > 0) {
-            bookmarkTree.forEach(rootNode => checkBookmarkDetail(rootNode));
-        }
-
-        return results;
-    }, [bookmarkTree]);
-
-
-
+    // 북마크 검색
     const filteredSections = useMemo(() => {
         if (!searchQuery.trim()) return bookmarkSections;
 
@@ -208,17 +158,17 @@ const BookmarkGroup = () => {
                                 }`}
                             >
                                 <div className="flex items-center gap-2.5 flex-1 justify-start  tracking-wide">
-                                    {viewMode === 'grid' ? <Squares2X2Icon className="w-5 h-5 text-blue-400" /> : <ListBulletIcon className="w-5 h-5 text-blue-400" />}
-                                    <span>{viewMode === 'grid' ? 'CARD' : 'LIST'}</span>
+                                    {viewMode === 'GRID' ? <Squares2X2Icon className="w-5 h-5 text-blue-400" /> : <ListBulletIcon className="w-5 h-5 text-blue-400" />}
+                                    <span>{viewMode === 'GRID' ? 'CARD' : 'LIST'}</span>
                                 </div>
                                 <ChevronDownIcon className={`w-3.5 h-3.5 text-gray-500 transition-transform ${isViewDropdownOpen ? 'rotate-180' : ''}`} />
                             </button>
                             {isViewDropdownOpen && (
                                 <div className="absolute top-full right-0 mt-2 w-36 bg-[#1e1e26] border border-gray-800 rounded-xl shadow-2xl overflow-hidden py-1.5 z-50 animate-in fade-in slide-in-from-top-1">
-                                    <button onClick={() => { setViewMode('grid'); setIsViewDropdownOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold transition-colors ${viewMode === 'grid' ? 'text-blue-400 bg-blue-500/10' : 'text-gray-500 hover:bg-gray-800 hover:text-white'}`}>
+                                    <button onClick={() => { setViewMode('GRID'); setIsViewDropdownOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold transition-colors ${viewMode === 'grid' ? 'text-blue-400 bg-blue-500/10' : 'text-gray-500 hover:bg-gray-800 hover:text-white'}`}>
                                         <Squares2X2Icon className="w-4 h-4" /> CARD VIEW
                                     </button>
-                                    <button onClick={() => { setViewMode('list'); setIsViewDropdownOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold transition-colors ${viewMode === 'list' ? 'text-blue-400 bg-blue-500/10' : 'text-gray-500 hover:bg-gray-800 hover:text-white'}`}>
+                                    <button onClick={() => { setViewMode('LIST'); setIsViewDropdownOpen(false); }} className={`w-full flex items-center gap-3 px-4 py-2.5 text-xs font-bold transition-colors ${viewMode === 'list' ? 'text-blue-400 bg-blue-500/10' : 'text-gray-500 hover:bg-gray-800 hover:text-white'}`}>
                                         <ListBulletIcon className="w-4 h-4" /> LIST VIEW
                                     </button>
                                 </div>

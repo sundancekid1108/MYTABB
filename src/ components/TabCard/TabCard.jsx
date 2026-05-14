@@ -21,19 +21,17 @@ const TabCard = (props ) => {
         if (!pageUrl) return null;
 
         if (extensionId) {
-       
+
             return `chrome-extension://${extensionId}/_favicon/?pageUrl=${encodeURIComponent(pageUrl)}&size=32`;
         }
 
-        // fallback: Google favicon
+
         const faviconDomain = new URL(pageUrl).hostname.replace(/^www\./, '');
         return
             `https://www.google.com/s2/favicons?domain=${faviconDomain}&sz=32`
 ;
     };
-
-
-
+    
 
     // favicon 설정
     useEffect(() => {

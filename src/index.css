@@ -1,4 +1,16 @@
 @import "tailwindcss";
+@tailwind utilities;
+
+@layer base {
+    html, body {
+        @apply bg-[#1e1e26] text-white uppercase;
+    }
+
+    button {
+        @apply uppercase;
+    }
+}
+
 
 /* 브라우저 전체 스크롤바 디자인 통일 (가로 & 세로) */
 ::-webkit-scrollbar {
