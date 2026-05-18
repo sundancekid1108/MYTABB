@@ -7,8 +7,20 @@ import {
     ChevronDownIcon, EllipsisVerticalIcon,
 } from '@heroicons/react/24/outline';
 import TabCard from "../TabCard/TabCard.jsx";
+import useBookmarkStore from "../../utils/zustand/bookmarkstore.js";
 
-const BookmarkSection = ({ title, cards, defaultOpen = true }) => {
+
+const BookmarkSection = (props) => {
+   const {folderId, title, cards, defaultOpen = true } = props
+
+    const {deleteBookmarkFolder} = useBookmarkStore()
+
+    const handleDelete = (id) => {
+        console.log(id)
+        deleteBookmarkFolder(id)
+
+    }
+
     return (
         <div className="mb-4">
             <Disclosure defaultOpen={defaultOpen}>
@@ -47,7 +59,9 @@ const BookmarkSection = ({ title, cards, defaultOpen = true }) => {
                                             </MenuItem>
                                             <MenuItem>
                                                 {({ isActivated }) => (
-                                                    <button className={`${isActivated ? 'bg-red-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                                    <button
+                                                        onClick={() => {handleDelete(folderId)}}
+                                                        className={`${isActivated ? 'bg-red-600 text-white' : 'text-gray-300'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
                                                       DELETE
                                                     </button>
                                                 )}

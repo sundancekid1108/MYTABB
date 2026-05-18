@@ -3,9 +3,9 @@ import { EllipsisVerticalIcon, XMarkIcon, CheckIcon, TagIcon, PlusIcon } from "@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import  {createBookmarkFolder} from '../../utils/chromeapi/chromeapi.js'
 
-const AddBookmark = ({ onSave, onCancel }) => {
+const AddBookmarkFolder = ({ onSave, onCancel }) => {
     const [title, setTitle] = useState("");
-    const [isLoading, setIsLoading] = useState(false); // 저장 중 상태 추가
+    const [isLoading, setIsLoading] = useState(false);
     const inputRef = useRef(null);
 
 
@@ -51,7 +51,7 @@ const AddBookmark = ({ onSave, onCancel }) => {
                         value={title}
                         onChange={(event) => setTitle(event.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="BOOKMARK TITLE"
+                        placeholder="BOOKMARK FOLDER TITLE"
                         className="bg-transparent text-xl font-bold tracking-wider text-white placeholder:text-gray-600 outline-none w-full"
                     />
                 </div>
@@ -110,4 +110,4 @@ const AddBookmark = ({ onSave, onCancel }) => {
     );
 };
 
-export default AddBookmark;
+export default AddBookmarkFolder;

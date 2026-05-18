@@ -117,5 +117,20 @@ const addUrlToBookmarkFolder = async (title, url, parentId)=> {
 }
 
 
+const deleteBookmarkFolder = async (folderId) => {
+    try {
+        if (typeof chrome !== "undefined" && chrome.bookmarks) {
+            await chrome.bookmarks.removeTree(folderId);
 
-export { getWindowsInfo, getCurrentTabInfo, getAllBookmarks, createBookmarkFolder, addUrlToBookmarkFolder, getBookmarkFolders }
+            return true;
+        }
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+
+
+
+export { getWindowsInfo, getCurrentTabInfo, getAllBookmarks, createBookmarkFolder, addUrlToBookmarkFolder, getBookmarkFolders , deleteBookmarkFolder}

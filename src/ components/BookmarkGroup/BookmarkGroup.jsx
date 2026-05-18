@@ -15,7 +15,7 @@ import {
     XMarkIcon
 } from '@heroicons/react/24/outline';
 import BookmarkSection from "../BookmarkSection/BookmarkSection.jsx";
-import AddBookmark from '../AddBookmark/AddBookmark.jsx'
+import AddBookmarkFolder from '../AddBookmarkFolder/AddBookmarkFolder.jsx'
 import useBookmarkStore from "../../utils/zustand/bookmarkstore.js";
 
 const BookmarkGroup = () => {
@@ -36,8 +36,8 @@ const BookmarkGroup = () => {
 
     const {bookmarkTree,bookmarkSections, initializeBookmarkSection} = useBookmarkStore();
 
-    // console.log(bookmarkTree);
-    // console.log(bookmarkSections);
+    console.log("bookmarkTree", bookmarkTree);
+    console.log("bookmarkSections", bookmarkSections);
 
     useEffect(() => {
         initializeBookmarkSection()
@@ -191,9 +191,8 @@ const BookmarkGroup = () => {
             <main  className="flex-1 overflow-y-auto px-8 pb-8 custom-scrollbar">
 
                 {isCreating && (
-                  <AddBookmark
+                  <AddBookmarkFolder
                       onSave={() => {
-
                           setIsCreating(false);
                       }}
                       onCancel={() => setIsCreating(false)}
@@ -204,6 +203,7 @@ const BookmarkGroup = () => {
                 {filteredSections.map((section) => (
                     <BookmarkSection
                         key={section.id}
+                        folderId={section.id}
                         title={section.title}
                         cards={section.cards}
                         viewMode={viewMode}
