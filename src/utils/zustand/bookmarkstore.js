@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import {getAllBookmarks, addUrlToBookmarkFolder, createBookmarkFolder, getBookmarkFolders ,deleteBookmarkFolder} from '../chromeapi/chromeapi.js'
+import {getAllBookmarks, addUrlToBookmarkFolder, createBookmarkFolder, getBookmarkFolders ,deleteBookmarkFolder, updateBookmarkFolder, } from '../chromeapi/chromeapi.js'
 
 const useBookmarkStore = create((set,get) => ({
     bookmarkTree: [],
@@ -51,20 +51,6 @@ const useBookmarkStore = create((set,get) => ({
     },
 
 
-
-    addSelectedTabsToBookmarkFolder: async (selectedTabs, parentId) => {
-        try {
-            const promises = selectedTabs.map((tab) =>
-                addUrlToBookmarkFolder(tab.title, tab.url, parentId)
-            );
-            await Promise.all(promises);
-            await get().initializeBookmarkSection();
-            return
-        } catch (error){
-            console.error(error);
-        }
-    },
-
     addBookmarkFolder: async (title) => {
         try {
             await createBookmarkFolder(title);
@@ -88,7 +74,48 @@ const useBookmarkStore = create((set,get) => ({
         } catch (error) {
             console.error(error);
         }
-    }
+    },
+
+    updateBookmarkFolderTitle: async (folderId, title) => {
+        try {
+            await updateBookmarkFolder(folderId, title);
+            await get().initializeBookmarkSection();
+        } catch (error) {
+            console.error(error);
+        }
+    },
+    addSelectedTabsToBookmarkFolder: async (selectedTabs, parentId) => {
+        try {
+            const promises = selectedTabs.map((tab) =>
+                addUrlToBookmarkFolder(tab.title, tab.url, parentId)
+            );
+            await Promise.all(promises);
+            await get().initializeBookmarkSection();
+
+        } catch (error){
+            console.error(error);
+        }
+    }, 
+
+    addSelectedTabsToNewBookmarkFolder: async (title, selectedTabs) => {
+        try {
+            const newFolder = await createBookmarkFolder(title);
+            if (!newFolder || !newFolder.id) {
+                console.error("새 폴더를 생성하지 못했습니다.");
+                return null;
+            }
+
+            const promises = selectedTabs.map((selectedTab) => {
+                addUrlToBookmarkFolder(selectedTab.title, selectedTab.url, newFolder.id);
+            })
+            await Promise.all(promises);
+            await get().initializeBookmarkSection();
+        } catch(error) {
+            console.error(error);
+        }
+    },
+
+
 
 
 }))

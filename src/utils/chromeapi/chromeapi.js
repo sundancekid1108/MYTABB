@@ -87,15 +87,17 @@ const createBookmarkFolder = async (title) => {
     try {
 
         //   parentId 1 => 북마크바, 2 => 기타 북마크
-        await chrome.bookmarks.create({
+        const result =  await chrome.bookmarks.create({
             parentId: "1",
             title: title
         });
+        return result;
 
     } catch (error) {
         console.error("북마크 폴더 생성 실패", error )
     }
 }
+
 
 const addUrlToBookmarkFolder = async (title, url, parentId)=> {
 
@@ -117,6 +119,23 @@ const addUrlToBookmarkFolder = async (title, url, parentId)=> {
 }
 
 
+const updateBookmarkFolder = async (id, title) => {
+    try {
+        // 1. Chrome 확장 프로그램 환경 및 북마크 API 존재 여부 확인
+        if (typeof chrome !== "undefined" && chrome.bookmarks) {
+            // chrome.bookmarks.update는 비동기로 작동하며 수정된 BookmarkTreeNode 객체를 반환합니다.
+            const result = await chrome.bookmarks.update(id, { title: title });
+
+            console.log("북마크 수정 성공:", result);
+            return result; // 성공 시 수정된 북마크 객체 반환
+        }
+    } catch (error) {
+        console.error("북마크 수정 실패:", error);
+        return null; // 에러 발생 시 null 반환
+    }
+};
+
+
 const deleteBookmarkFolder = async (folderId) => {
     try {
         if (typeof chrome !== "undefined" && chrome.bookmarks) {
@@ -133,4 +152,4 @@ const deleteBookmarkFolder = async (folderId) => {
 
 
 
-export { getWindowsInfo, getCurrentTabInfo, getAllBookmarks, createBookmarkFolder, addUrlToBookmarkFolder, getBookmarkFolders , deleteBookmarkFolder}
+export { getWindowsInfo, getCurrentTabInfo, getAllBookmarks, createBookmarkFolder, addUrlToBookmarkFolder, getBookmarkFolders , deleteBookmarkFolder, updateBookmarkFolder}

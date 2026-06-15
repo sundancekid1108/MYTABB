@@ -15,7 +15,7 @@ import {
 const Modal = () => {
 	
 	const {selectedTabs, clearSelectedTabs} = useTabStore()
-	const {bookmarkFolders, addSelectedTabsToBookmarkFolder} = useBookmarkStore()
+	const {bookmarkFolders, addSelectedTabsToBookmarkFolder, addSelectedTabsToNewBookmarkFolder} = useBookmarkStore()
 	const { isModalOpen, openModal, closeModal } = useModalStore();
 
 
@@ -55,7 +55,7 @@ const Modal = () => {
 		}
 	};
 
-	const handleSaveToExistingBookmark = () => {
+	const handleSaveSelectedTabsToExistingBookmark = () => {
 		console.log("기존 북마크에 저장:", {
 			folder: selectedFolder,
 			title: bookmarkTitle,
@@ -65,9 +65,19 @@ const Modal = () => {
 		addSelectedTabsToBookmarkFolder(selectedTabs, selectedFolder)
 
 		clearSelectedTabs()
-		closeModal();
+		closeModal(); 
 		resetModal();
 	};
+
+	const handleSaveSelectedTabsToNewBookmarkFolder = () => {
+		console.log("새탭에 저장", {title: bookmarkTitle,
+			tabs: selectedTabs})
+
+		addSelectedTabsToNewBookmarkFolder(bookmarkTitle, selectedTabs)
+		clearSelectedTabs()
+		closeModal();
+		resetModal();
+	}
 
 
 
@@ -212,7 +222,7 @@ const Modal = () => {
 												Back
 											</button>
 											<button
-												onClick={handleSaveToExistingBookmark}
+												onClick={handleSaveSelectedTabsToExistingBookmark}
 												disabled={!selectedFolder || !bookmarkTitle.trim()}
 												className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded-2xl transition-all active:scale-[0.985]"
 											>
@@ -246,14 +256,7 @@ const Modal = () => {
 												Back
 											</button>
 											<button
-												onClick={() => {
-													console.log("새 컬렉션 생성:", {
-														title: bookmarkTitle,
-														tabs: selectedTabs
-													});
-													closeModal();
-													resetModal();
-												}}
+												onClick={handleSaveSelectedTabsToNewBookmarkFolder}
 												disabled={!bookmarkTitle.trim()}
 												className="flex-1 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded-2xl transition-all active:scale-[0.985]"
 											>

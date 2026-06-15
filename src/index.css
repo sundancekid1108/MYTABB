@@ -28,7 +28,7 @@
     background: #4b5563; /* 마우스 올렸을 때 살짝 밝게 */
 }
 
-/* 스크롤바 트랙 (바탕 길) */
+/* 스크롤바 트랙  */
 ::-webkit-scrollbar-track {
     background: #1e1e26; /* 메인 배경색과 일치시켜 일체감 부여 */
 }

@@ -194,6 +194,7 @@ const BookmarkGroup = () => {
                   <AddBookmarkFolder
                       onSave={() => {
                           setIsCreating(false);
+
                       }}
                       onCancel={() => setIsCreating(false)}
                   />
