@@ -16,7 +16,7 @@ const AddBookmarkFolder = (props) => {
         defaultValues: {
             title: ""
         },
-        mode: "onChange" // 실시간으로 유효성 검사 및 버튼 활성화 상태 반영
+        mode: "onChange"
     });
 
 
@@ -52,7 +52,7 @@ const AddBookmarkFolder = (props) => {
                     <div className="p-2 bg-blue-500/10 rounded-lg">
                         <TagIcon className="w-5 h-5 text-blue-400" />
                     </div>
-                    {/* 3. register 함수 바인딩 및 유효성 설정 */}
+
                     <input
                         type="text"
                         placeholder="BOOKMARK FOLDER TITLE"

@@ -52,7 +52,6 @@ const  WindowGroup = ( { index, tabs, selectedTabs, actions } ) => {
                     </Transition>
                 </div>
             )}
-
         </Disclosure>
         )
 
