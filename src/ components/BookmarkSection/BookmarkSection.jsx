@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useRef, useEffect } from 'react';
+import { useForm } from 'react-hook-form'; // react-hook-form 추가
 import {
     Disclosure, DisclosureButton, DisclosurePanel,
     Menu, MenuButton, MenuItem, MenuItems, Transition
@@ -12,27 +13,49 @@ import useBookmarkStore from "../../utils/zustand/bookmarkstore.js";
 
 const BookmarkSection = (props) => {
    const {folderId, title, cards, defaultOpen = true } = props
-    const inputRef = useRef(null);
+
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editTitle, setEditTitle] = useState(title);
-    const {deleteBookmarkFolder, updateBookmarkFolderTitle} = useBookmarkStore()
+    const {deleteBookmarkFolder,updateBookmarkFolderTitle } = useBookmarkStore()
+
+    const { register, handleSubmit, reset, setFocus, formState: { errors } } = useForm({
+        defaultValues: {
+            bookmarkFolderTitle: title
+        }
+    });
+
+    useEffect(() => {
+        reset({ bookmarkFolderTitle: title });
+    }, [title, reset]);
+
+    useEffect(() => {
+        if (isEditing) {
+            setFocus('bookmarkFolderTitle');
+        }
+    }, [isEditing, setFocus]);
+
 
     const handleDelete =  async(id) => {
-        console.log(id)
         await deleteBookmarkFolder(id)
 
     }
 
     const handleCancelEdit = () => {
-
+        reset({ bookmarkFolderTitle: title });
         setIsEditing(false);
+
+
     };
 
-    const handleSaveTitle =async () => {
-        console.log("handleSaveTitle")
-        await updateBookmarkFolderTitle(folderId, editTitle)
-        setIsEditing(false);
+    const onSaveValid = async (data) => {
+        try {
+            await updateBookmarkFolderTitle(folderId, data.bookmarkFolderTitle);
+            setIsEditing(false);
+        } catch (error) {
+            console.error("북마크 타이틀 수정 실패:", error);
+        }
+
+
     }
 
     return (
@@ -45,33 +68,47 @@ const BookmarkSection = (props) => {
 
                             {isEditing ? (
 
-                                <div className="flex items-center gap-2 w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-                                    <input
-                                        ref={inputRef}
-                                        type="text"
-                                        value={editTitle}
-                                        onChange={(e) => setEditTitle(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') handleSaveTitle();
-                                            if (e.key === 'Escape') handleCancelEdit();
-                                        }}
-                                        className="bg-[#2d2d3a] text-white text-sm font-bold px-2 py-1 rounded border border-blue-500 focus:outline-none w-full"
-                                    />
+                                <form
+                                    onSubmit={handleSubmit(onSaveValid)}
+                                    className="flex items-center gap-2 w-full max-w-md"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <div className="relative w-full">
+                                        <input
+                                            type="text"
+                                            {...register('bookmarkFolderTitle', {
+                                                required: '폴더 이름은 필수입니다.',
+                                                validate: value => value.trim() !== '' || '공백은 입력할 수 없습니다.'
+                                            })}
+                                            onKeyDown={(event) => {
+                                                if (event.key === 'Escape') handleCancelEdit();
+                                            }}
+                                            className={`bg-[#2d2d3a] text-white text-sm font-bold px-2 py-1 rounded border focus:outline-none w-full ${
+                                                errors.bookmarkFolderTitle ? 'border-red-500' : 'border-blue-500'
+                                            }`}
+                                        />
+                                        {errors.bookmarkFolderTitle && (
+                                            <span className="absolute left-0 -bottom-5 text-xs text-red-500">
+                                                {errors.bookmarkFolderTitle.message}
+                                            </span>
+                                        )}
+                                    </div>
                                     <button
-                                        onClick={handleSaveTitle}
+                                        type="submit"
                                         className="p-1 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors"
                                         title="저장"
                                     >
                                         <CheckIcon className="w-4 h-4" />
                                     </button>
                                     <button
+                                        type="button" // 반드시 type="button" 명시 (제출 방지)
                                         onClick={handleCancelEdit}
                                         className="p-1 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors"
                                         title="취소"
                                     >
                                         <XMarkIcon className="w-4 h-4" />
                                     </button>
-                                </div>
+                                </form>
                             ) : (
 
                                 <DisclosureButton className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors focus:outline-none">
