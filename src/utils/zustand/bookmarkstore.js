@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-
 import {getAllBookmarks, addUrlToBookmarkFolder, createBookmarkFolder, getBookmarkFolders ,deleteBookmarkFolder, updateBookmarkFolder, } from '../chromeapi/chromeapi.js'
 
 const useBookmarkStore = create((set,get) => ({
@@ -51,7 +50,8 @@ const useBookmarkStore = create((set,get) => ({
     },
 
 
-    addBookmarkFolder: async (title) => {
+
+    createBookmarkFolder: async (title) => {
         try {
             await createBookmarkFolder(title);
             await get().initializeBookmarkSection();
@@ -75,6 +75,16 @@ const useBookmarkStore = create((set,get) => ({
             console.error(error);
         }
     },
+
+    addCurrentTabToBookmarkFolder: async (title, url, parentId) => {
+        try {
+            await addUrlToBookmarkFolder(title, url, parentId);
+            await get().initializeBookmarkSection();
+        }catch(error ) {
+            console.error(error);
+        }
+    },
+    
 
     updateBookmarkFolderTitle: async (folderId, title) => {
         try {
@@ -115,6 +125,15 @@ const useBookmarkStore = create((set,get) => ({
         }
     },
 
+    addUrlToBookmarkFolder: async (title, url, parentId) => {
+        try {
+            await addUrlToBookmarkFolder(title, url, parentId);
+            await get().initializeBookmarkSection();
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
 
 

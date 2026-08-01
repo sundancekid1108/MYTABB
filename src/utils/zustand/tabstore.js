@@ -1,11 +1,12 @@
 import { create } from 'zustand';
-import { getWindowsInfo} from '../chromeapi/chromeapi.js'
+import { getWindowsInfo, getCurrentTabInfo ,addUrlToBookmarkFolder } from '../chromeapi/chromeapi.js'
 
 
 
 const useTabStore = create((set, get) => ({
     openTabs: [],
     selectedTabs: [],
+    currentTab: null,
     isModalOpen: false,
 
     fetchTabs: async () => {
@@ -65,8 +66,17 @@ const useTabStore = create((set, get) => ({
 
     clearSelectedTabs: () => set({ selectedTabs: [] }),
 
+    getCurrentTabInfo : async () => {
+        try {
+            const result = await getCurrentTabInfo();
+            set({ currentTab: result });
 
+            return result;
+        } catch (error) {
 
+            console.error(error)
+        }
+    }
 
 
 

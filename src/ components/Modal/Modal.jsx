@@ -23,8 +23,6 @@ const Modal = () => {
 	// 모달 내부 상태
 	const [mode, setMode] = useState('initial');
 
-	// const [selectedFolder, setSelectedFolder] = useState('');
-	// const [bookmarkTitle, setBookmarkTitle] = useState('');
 
 	const {register,
 		handleSubmit,
@@ -71,13 +69,13 @@ const Modal = () => {
 		}
 	};
 
-	const onSubmit = (data) => {
+	const onSubmit = async  (data) => {
 
 		console.log(data);
 		if(mode === "addExistingBookmarkFolder") {
-			addSelectedTabsToBookmarkFolder(selectedTabs, data.selectedFolder );
+			await addSelectedTabsToBookmarkFolder(selectedTabs, data.selectedFolder );
 		} else if (mode === "addNewBookmarkFolder") {
-			addSelectedTabsToNewBookmarkFolder(data.bookmarkTitle, selectedTabs );
+			await addSelectedTabsToNewBookmarkFolder(data.bookmarkTitle, selectedTabs );
 		}
 
 		clearSelectedTabs()

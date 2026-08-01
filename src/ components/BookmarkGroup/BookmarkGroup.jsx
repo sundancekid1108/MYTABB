@@ -36,8 +36,7 @@ const BookmarkGroup = () => {
 
     const {bookmarkTree,bookmarkSections, initializeBookmarkSection} = useBookmarkStore();
 
-    console.log("bookmarkTree", bookmarkTree);
-    console.log("bookmarkSections", bookmarkSections);
+
 
     useEffect(() => {
         initializeBookmarkSection()

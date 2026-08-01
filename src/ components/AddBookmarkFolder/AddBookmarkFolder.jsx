@@ -10,7 +10,7 @@ const AddBookmarkFolder = (props) => {
     const { onSave, onCancel } = props
     const [isLoading, setIsLoading] = useState(false);
 
-    const {addBookmarkFolder} = useBookmarkStore();
+    const {createBookmarkFolder} = useBookmarkStore();
 
     const { register, handleSubmit, watch, formState: { isValid } } = useForm({
         defaultValues: {
@@ -24,7 +24,7 @@ const AddBookmarkFolder = (props) => {
         const trimmedTitle = data.title.trim();
         try {
             setIsLoading(true);
-            await addBookmarkFolder(trimmedTitle);
+            await createBookmarkFolder(trimmedTitle);
             onSave()
         } catch (error) {
             console.error("북마크 폴더 생성 실패:", error);

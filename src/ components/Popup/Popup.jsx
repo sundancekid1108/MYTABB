@@ -8,53 +8,89 @@ import {
     ArrowDownTrayIcon,
     XMarkIcon
 } from '@heroicons/react/24/outline';
-
-import {getCurrentTabInfo} from '../../utils/chromeapi/chromeapi.js'
+import { useForm } from "react-hook-form"
+import useBookmarkStore from "../../utils/zustand/bookmarkstore.js";
+import useTabStore from "../../utils/zustand/tabstore.js";
 
 const Popup = () => {
     const [tabInfo, setTabInfo] = useState({ title: '', url: '' });
-    const [selectedCollection, setSelectedCollection] = useState('Default');
-    const [isCreating, setIsCreating] = useState(false);
+    const {
+        bookmarkFolders,
+        initializeBookmarkSection,
+
+        addCurrentTabToBookmarkFolder
+    } = useBookmarkStore();
+
+    const {currentTab, getCurrentTabInfo } = useTabStore()
+    const [selectedBookmarkFolder, setSelectedBookmarkFolder] = useState(''); // 선택된 폴더 ID 상태
+
     const [copied, setCopied] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
 
-    const collections = ['Work', 'Design', 'Reading', 'Inspiration'];
+
+    const { register, handleSubmit, setValue } = useForm({
+        defaultValues: {
+            title: ''
+        }
+    });
+
 
 
     useEffect(() => {
-
         const initPopup = async () => {
             setIsLoading(true);
             try {
-                const info = await getCurrentTabInfo();
-                setTabInfo(info);
-            } finally {
 
-                setIsLoading(false)
+                if (initializeBookmarkSection) {
+                    await initializeBookmarkSection();
+                }
+
+
+                const tab = await getCurrentTabInfo();
+                if (tab?.title) {
+                    setValue('title', tab.title);
+                }
+            } catch (error) {
+                console.error("Popup 초기화 실패:", error);
+            } finally {
+                setIsLoading(false);
             }
         };
+
         initPopup();
-
-
     }, []);
 
+
+    useEffect(() => {
+        if (bookmarkFolders?.length > 0 && !selectedBookmarkFolder) {
+            setSelectedBookmarkFolder(bookmarkFolders[0].id);
+        }
+    }, [bookmarkFolders, selectedBookmarkFolder]);
+
+
+
+
+    // URL 복사 기능 (Zustand의 currentTab.url 사용)
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(tabInfo.url);
+        if (!currentTab?.url) return;
+        navigator.clipboard.writeText(currentTab.url);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
+
     };
 
-    const handleSaveTab = () => {
-        console.log("Saving to collection:", {
-            ...tabInfo,
-            collection: selectedCollection
-        });
-        alert(`${selectedCollection} 컬렉션에 추가되었습니다! `);
+
+    const handleClosePopup = () => {
         window.close();
     };
 
-    const handleClosePopup = () => {
+    const onSubmit = async (data) => {
+        const  title = data.title
+        const currentUrl = currentTab.url
+        const folderId = selectedBookmarkFolder
+
+        await addCurrentTabToBookmarkFolder(title, currentUrl , folderId )
         window.close();
     };
 
@@ -75,63 +111,70 @@ const Popup = () => {
 
             <div className="space-y-4">
                 {isLoading ? <div>Loading...</div> :
-                    <div className="bg-[#1c1c1f] border border-gray-800 rounded-2xl p-4 space-y-4 animate-in fade-in slide-in-from-top-2">
 
-                        <div>
-                            <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">Page Title</p>
-                            <input
-                                type="text"
-                                value={tabInfo.title}
-                                onChange={(event) => setTabInfo({...tabInfo, title: event.target.value})}
-                                className="w-full bg-[#121214] border border-gray-800 rounded-lg px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors"
-                                placeholder="제목을 입력하세요"
-                            />
-                        </div>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="bg-[#1c1c1f] border border-gray-800 rounded-2xl p-4 space-y-4 animate-in fade-in slide-in-from-top-2">
+
+                            <div>
+                                <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">Page Title</p>
+                                <input
+                                    type="text"
+                                    {...register("title")}
+                                    onChange={(event) => setTabInfo({...tabInfo, title: event.target.value})}
+                                    className="w-full bg-[#121214] border border-gray-800 rounded-lg px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-indigo-500 transition-colors"
+                                    placeholder="제목을 입력하세요"
+                                />
+                            </div>
 
 
-                        <div>
-                            <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">URL Address</p>
-                            <div className="flex items-center gap-2 bg-[#121214] p-2.5 rounded-lg border border-gray-800">
+                            <div>
+                                <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">URL Address</p>
+                                <div className="flex items-center gap-2 bg-[#121214] p-2.5 rounded-lg border border-gray-800">
                                 <span className="text-[11px] text-gray-500 truncate flex-1 font-mono italic">
-                                    {tabInfo.url}
+                                    {currentTab.url}
                                 </span>
-                                <button
-                                    onClick={copyToClipboard}
-                                    className="p-1.5 hover:bg-gray-800 rounded-md transition-colors text-gray-500 hover:text-white"
-                                >
-                                    {copied ? <CheckIcon className="w-4 h-4 text-green-500" /> : <ClipboardDocumentIcon className="w-4 h-4" />}
-                                </button>
+                                    <button
+                                        onClick={copyToClipboard}
+                                        className="p-1.5 hover:bg-gray-800 rounded-md transition-colors text-gray-500 hover:text-white"
+                                    >
+                                        {copied ? <CheckIcon className="w-4 h-4 text-green-500" /> : <ClipboardDocumentIcon className="w-4 h-4" />}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
 
 
-                        <div>
-                            <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">Select Collection</p>
-                            <div className="relative">
-                                <FolderIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                <select
-                                    value={selectedCollection}
-                                    onChange={(event) => setSelectedCollection(event.target.value)}
-                                    className="w-full bg-[#121214] border border-gray-800 rounded-lg pl-9 pr-10 py-2.5 text-sm text-gray-200 appearance-none focus:outline-none focus:border-indigo-500 cursor-pointer"
-                                >
-                                    <option value="Default">Default Collection</option>
-                                    {collections.map(item => (
-                                        <option key={item} value={item}>{item}</option>
-                                    ))}
-                                </select>
-                                <ChevronDownIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                            <div>
+                                <p className="text-[10px] font-bold text-indigo-400  tracking-widest mb-1.5 ml-1">Select Collection</p>
+                                <div className="relative">
+                                    <FolderIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                                    <select
+                                        value={selectedBookmarkFolder}
+
+                                        onChange={(event) => setSelectedBookmarkFolder(event.target.value)}
+                                        className="w-full bg-[#121214] border border-gray-800 rounded-lg pl-9 pr-10 py-2.5 text-sm text-gray-200 appearance-none focus:outline-none focus:border-indigo-500 cursor-pointer"
+                                    >
+
+                                        {bookmarkFolders && bookmarkFolders.map(folder => (
+                                            <option key={folder.id} value={folder.id}>
+                                                {folder.title}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDownIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                                </div>
                             </div>
+
+
+                            <button
+                                type="submit"
+                                className="w-full bg-white hover:bg-gray-200 text-black py-3 rounded-xl font-black text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
+                            >
+                                <ArrowDownTrayIcon className="w-4 h-4" />
+                                ADD TO COLLECTION
+                            </button>
                         </div>
+                    </form>
 
-
-                        <button
-                            onClick={handleSaveTab}
-                            className="w-full bg-white hover:bg-gray-200 text-black py-3 rounded-xl font-black text-xs transition-all active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
-                        >
-                            <ArrowDownTrayIcon className="w-4 h-4" />
-                            ADD TO COLLECTION
-                        </button>
-                    </div>
                 }
 
 

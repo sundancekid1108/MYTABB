@@ -101,7 +101,7 @@ const BookmarkSection = (props) => {
                                         <CheckIcon className="w-4 h-4" />
                                     </button>
                                     <button
-                                        type="button" // 반드시 type="button" 명시 (제출 방지)
+                                        type="button"
                                         onClick={handleCancelEdit}
                                         className="p-1 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded transition-colors"
                                         title="취소"

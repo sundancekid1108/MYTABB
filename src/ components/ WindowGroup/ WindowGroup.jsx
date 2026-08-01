@@ -17,7 +17,6 @@ const  WindowGroup = ( { index, tabs, selectedTabs, actions } ) => {
                                 className={`w-3.5 h-3.5 text-gray-600 transition-transform duration-200 ${open ? '' : '-rotate-90'}`}
                             />
                         </Disclosure.Button>
-
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button className="p-1 hover:bg-gray-700 rounded text-gray-500 hover:text-blue-400" title="Save Window">
                                 <ArrowDownOnSquareIcon className="w-4 h-4" />
