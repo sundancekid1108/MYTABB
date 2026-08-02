@@ -23,33 +23,133 @@ const getCurrentTabInfo = async () => {
             }
         }
 
-        return {
-            title: "How to Build a Chrome Extension with React and Tailwind...",
-            url: "https://github.com/react-labs/extension"
-        };
+
     } catch (error) {
         console.error("탭 정보를 가져오는 중 오류 발생:", error);
         return { title: '', url: '' };
     }
 };
 
-export const getAllBookmarks = async () => {
+const getAllBookmarks = async () => {
     try {
         if (typeof chrome !== "undefined" && chrome.tabs) {
             const result = await chrome.bookmarks.getTree();
 
+            // console.log("getAllBookmarks result", result)
             return result
         }
 
 
-
-
     } catch (error) {
-        console.error("Failed to get bookmarks tree:", error);
+        console.error("북마크 가져오기 실패");
         return [];
     }
 };
 
+const getBookmarkFolders = async () => {
+    try {
+        if (typeof chrome !== "undefined" && chrome.bookmarks) {
+            const tree = await chrome.bookmarks.getTree();
+            const folderList = [];
 
 
-export { getWindowsInfo, getCurrentTabInfo }
+            const findFolders = (nodes) => {
+                for (let i = 0; i < nodes.length; i++) {
+                    const node = nodes[i]
+                    if (!node.url) {
+
+                        folderList.push({
+                            id: node.id,
+                            title: node.title || (node.id === "0" ? "Root" : "이름 없는 폴더")
+                        });
+
+                        if (node.children) {
+                            findFolders(node.children);
+                        }
+                    }
+                }
+            };
+
+            findFolders(tree);
+            return folderList;
+        }
+        return [];
+
+
+    } catch (error) {
+        console.error("폴더 목록 가져오기 실패:", error);
+        return [];
+    }
+}
+
+
+const createBookmarkFolder = async (title) => {
+    try {
+
+        //   parentId 1 => 북마크바, 2 => 기타 북마크
+        const result =  await chrome.bookmarks.create({
+            parentId: "1",
+            title: title
+        });
+        return result;
+
+    } catch (error) {
+        console.error("북마크 폴더 생성 실패", error )
+    }
+}
+
+
+const addUrlToBookmarkFolder = async (title, url, parentId)=> {
+
+        try {
+
+            if (typeof chrome !== "undefined" && chrome.bookmarks) {
+                const result = await chrome.bookmarks.create({
+                    parentId: parentId,
+                    title: title,
+                    url: url
+                });
+                console.log("북마크 추가 성공:", result);
+                return result;
+            }
+        } catch (error) {
+            console.error("북마크 추가 실패:", error);
+            return null;
+        }
+}
+
+
+const updateBookmarkFolder = async (id, title) => {
+    try {
+        // 1. Chrome 확장 프로그램 환경 및 북마크 API 존재 여부 확인
+        if (typeof chrome !== "undefined" && chrome.bookmarks) {
+            // chrome.bookmarks.update는 비동기로 작동하며 수정된 BookmarkTreeNode 객체를 반환합니다.
+            const result = await chrome.bookmarks.update(id, { title: title });
+
+            console.log("북마크 수정 성공:", result);
+            return result; // 성공 시 수정된 북마크 객체 반환
+        }
+    } catch (error) {
+        console.error("북마크 수정 실패:", error);
+        return null; // 에러 발생 시 null 반환
+    }
+};
+
+
+const deleteBookmarkFolder = async (folderId) => {
+    try {
+        if (typeof chrome !== "undefined" && chrome.bookmarks) {
+            await chrome.bookmarks.removeTree(folderId);
+
+            return true;
+        }
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+
+
+
+export { getWindowsInfo, getCurrentTabInfo, getAllBookmarks, createBookmarkFolder, addUrlToBookmarkFolder, getBookmarkFolders , deleteBookmarkFolder, updateBookmarkFolder}

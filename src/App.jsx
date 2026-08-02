@@ -47,7 +47,7 @@ const App = () => {
 	}, [fetchTabs]);
 
 	return (
-		<div className="flex h-screen w-screen bg-[#1e1e26] text-white font-sans overflow-hidden selection:bg-blue-500/30 uppercase">
+		<div className="flex h-screen w-screen bg-[#1e1e26] text-white font-sans overflow-hidden selection:bg-blue-500/30  ">
 
 
 			<LeftSidebar
